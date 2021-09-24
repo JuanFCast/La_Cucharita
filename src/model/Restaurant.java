@@ -23,40 +23,17 @@ public class Restaurant {
 		
 	}
 	
+	//METODOS
 	
 	
-	
-	
-	
-	public List<User> getUserList() {
-		return userList;
-	}
-
-
-
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
-	}
-
-
-
-
-
+	//Este metodo añade un nuevo usuario al sistema
 	public void createAccount(String id, String name, LocalDate birthday, String passwordfield) {
 		User userAcc= new User(id, name, birthday, passwordfield);
 		userList.add(userAcc);
 		
 	}
 	
-	
-	
-	
-	
-	/**
-	 * Este metodo evalua si el usuario se encuentra registrado y sus datos coinciden para asi poder permitirle iniciar sesion
-	 * Diseñado por Juan Camilo
-	 * */
+	//Este metodo evalua si el usuario se encuentra registrado y sus datos coinciden para asi poder permitirle iniciar sesion
 	public boolean evaluate_If_User_Can_LogIn(String user, String password) {
 		boolean confirmation = false;
 		
@@ -69,10 +46,7 @@ public class Restaurant {
 		return confirmation;
 	}
 	
-	
-	
-	
-	
+	//Este metodo añade un platillo en la lista de carta
 	public boolean add_New_Dish_In_The_Menu(String dishName, ArrayList<Ingredient> ingredients, double price) {
 		if(dishesAvailable.add(new Dish(dishName, ingredients, price))) {
 			return true;
@@ -82,14 +56,17 @@ public class Restaurant {
 	}
 	
 	
-	
+	//Getters y Setters
+	public List<User> getUserList() {
+		return userList;
+	}
 
-	
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
 
-	
-
-	
-	
-	
+	public List<Dish> getDishesAvailable() {
+		return dishesAvailable;
+	}
 	
 }
