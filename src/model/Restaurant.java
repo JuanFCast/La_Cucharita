@@ -1,5 +1,10 @@
 package model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +42,20 @@ public class Restaurant {
 		
 	}
 	
+	
+	// Este metodo revisa si un ingrediente que quiere ser agregado ya existe
+	// retorna true si existe y false en el caso contrario
+	public boolean employeeExist(String id) {
+		boolean exist = false;
+		for (int i = 0; i< userList.size() && !exist; i++) {
+			if(userList.get(i).getId().equals(id)) {
+				exist = true;
+			}
+		}
+		return exist;
+	}
+	
+	
 	//Este metodo evalua si el usuario se encuentra registrado y sus datos coinciden para asi poder permitirle iniciar sesion
 	public boolean evaluate_If_User_Can_LogIn(String user, String password) {
 		boolean confirmation = false;
@@ -66,6 +85,26 @@ public class Restaurant {
 			return false;
 		}
 	}
+	
+	public boolean addOrder(String UUID, ArrayList<DishOrder> dishesOrdered) {
+		if(order.add(new Order(UUID, dishesOrdered))){
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	
+	
+	//Este metodo es el que crea el archivo serializado de empleados
+	//Archive serialized
+	public void saveEmployees() throws FileNotFoundException, IOException{
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("data/employees.LaCucharita")));
+		oos.writeObject(userList);
+		oos.close();
+	}
+	
+	
 	
 	
 	//Getters y Setters
