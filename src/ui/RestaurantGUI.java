@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.swing.JOptionPane;
 
 import javafx.fxml.FXMLLoader;
@@ -135,6 +136,8 @@ public class RestaurantGUI {
     private TableColumn<DishOrder, Integer> tcAmountDishInCart;
     @FXML
     private TableColumn<DishOrder, Double> tcTotalPriceDishInCart;
+    @FXML
+    private Label labTotalToPay;
     
     private ObservableList<DishOrder> obsDishOrder;
 
@@ -382,6 +385,17 @@ public class RestaurantGUI {
 		tcTotalPriceDishInCart.setCellValueFactory(new PropertyValueFactory<DishOrder, Double>("totalPrice"));
     }
 	
+    public double totalToPay() {
+    	double total = 0;
+    	
+    	for(int i = 0; i < laCucharita.getMiniOrder().size(); i++) {
+    		if(laCucharita.getMiniOrder().get(i).getTotalPrice() != 0) {
+    			total = total + laCucharita.getMiniOrder().get(i).getTotalPrice();
+    		}
+    	}
+    	
+    	return total;
+    }
 	
 	
 	/**Metodos de mostrar modulos*/
@@ -462,6 +476,7 @@ public class RestaurantGUI {
     	mainPane.getChildren().setAll(log);
     	
     	itializeTableViewOfItemsInCart();
+    	labTotalToPay.setText("" + totalToPay());
 	}
 	
 	public void OrderMenu() throws IOException {
@@ -481,6 +496,7 @@ public class RestaurantGUI {
     	measurementType.getItems().addAll(MEASUREMENT_TYPE.MILLILITERS, MEASUREMENT_TYPE.GRAMS, MEASUREMENT_TYPE.UNITS, MEASUREMENT_TYPE.KILOGRAMS);
     	
     	itializeTableViewInventory();
+    	
 	}
 	
 	//Este metodo muestra la pantalla del modulo de empleados
@@ -496,7 +512,7 @@ public class RestaurantGUI {
 	//Este metodo hace el registor a un empleado
     @FXML
     public void createAccount(ActionEvent event) {
-    	if(!txtUserName.getText().equals("") && !id.getText().equals("") &&birthday.getValue()!=null  &&  !passwordField.getText().equals("")){
+    	if(!id.getText().equals("") && !txtUserName.getText().equals("") &&birthday.getValue()!=null  &&  !passwordField.getText().equals("")){
     		if(!id.getText().equals("") && !txtUserName.getText().equals("")  &&birthday.getValue()!=null  &&  !passwordField.getText().equals("")){
 
     			laCucharita.createAccount(id.getText(), txtUserName.getText(), birthday.getValue(),passwordField.getText());
@@ -605,7 +621,7 @@ public class RestaurantGUI {
 	  
 	    // este metodo es para agregar un nuevo ingrediente desde el inventario
 	    @FXML
-	    void addNewIngredient(ActionEvent event) {
+	    public void addNewIngredient(ActionEvent event) {
 	    	String name ="";
 	    	MEASUREMENT_TYPE type;
 	    	double amount = -1;
@@ -637,7 +653,7 @@ public class RestaurantGUI {
 
 	    
 	    // Este metodo inicializa la lista que muestra los ingredinetes en el modulo de inventario
-	    private void itializeTableViewInventory() {
+	    public void itializeTableViewInventory() {
 	    	observableListIngredients = FXCollections.observableArrayList(inventory.getIngredients());
 	    	
 	    	tvIngredients.setItems(observableListIngredients);
@@ -648,17 +664,23 @@ public class RestaurantGUI {
 	    
 	    // este metodo es para restar en 1 la cantidad del ingrediente seleccionado
 	    @FXML
-	    void less(ActionEvent event) {
-
+	    public void less(ActionEvent event) throws IOException {
+	    	if(tvIngredients.getSelectionModel().getSelectedItem().getAmount()>0) {
+	    	tvIngredients.getSelectionModel().getSelectedItem().setAmount(tvIngredients.getSelectionModel().getSelectedItem().getAmount()-1);
+	    	printWarning("se resto -1");
+	    	
+	    	}else {
+	    		printWarning("no puede tener cantidades negativas");
+	    	}	 
+	    	OpenInventory();
 	    }
-	    
-	    
-
-	    
+	    	    
 	    // este metodo es para restar en 1 la cantidad del ingrediente seleccionado
 	    @FXML
-	    void plus(ActionEvent event) {
-
+	    public void plus(ActionEvent event) throws IOException {
+	    	tvIngredients.getSelectionModel().getSelectedItem().setAmount(tvIngredients.getSelectionModel().getSelectedItem().getAmount()+1);
+	    	printWarning("se aumento +1");
+	    	OpenInventory();
 	    }
 	    
 	    
